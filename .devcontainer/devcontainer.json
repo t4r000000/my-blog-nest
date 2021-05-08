@@ -1,0 +1,14 @@
+{
+  "name": "my-blog-backend",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "node",
+  "workspaceFolder": "/app",
+  "extensions": [
+    "ms-vsliveshare.vsliveshare",
+    "dbaeumer.vscode-eslint",
+    "hashicorp.terraform"
+],
+  "settings": {
+    "editor.formatOnSave": true,
+  }
+}

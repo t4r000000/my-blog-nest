@@ -1,13 +1,9 @@
 import { Task } from '../domain/task';
-
-export interface taskRepositry {
-  findById(taskId: number): Task;
-  save(task: Task): Task;
-}
+import { TaskRepositry } from '../domain-services/task-repositry';
 
 class TaskApplication {
-  taskRepositry: taskRepositry;
-  constructor(taskRepositry: taskRepositry) {
+  taskRepositry: TaskRepositry;
+  constructor(taskRepositry: TaskRepositry) {
     this.taskRepositry = taskRepositry;
   }
 

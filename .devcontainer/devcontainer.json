@@ -6,7 +6,8 @@
   "extensions": [
     "ms-vsliveshare.vsliveshare",
     "dbaeumer.vscode-eslint",
-    "hashicorp.terraform"
+    "hashicorp.terraform",
+    "esbenp.prettier-vscode"
 ],
   "settings": {
     "editor.formatOnSave": true,

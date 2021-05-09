@@ -7,5 +7,9 @@ services:
       dockerfile: ./Docker/node/Dockerfile
     volumes: 
       - ./:/app
+      - node_modules_volume:/app/node_modules
     ports: 
-      - '8000:8000'
+      - '3000:3000'
+
+volumes: 
+  node_modules_volume:

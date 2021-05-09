@@ -7,9 +7,13 @@
     "ms-vsliveshare.vsliveshare",
     "dbaeumer.vscode-eslint",
     "hashicorp.terraform",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "prisma.prisma"
 ],
   "settings": {
     "editor.formatOnSave": true,
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma"
+    },
   }
 }

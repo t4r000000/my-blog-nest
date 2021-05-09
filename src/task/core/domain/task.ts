@@ -5,6 +5,7 @@
 // タスク名は変更することができない
 
 export class Task {
+  private id: number;
   private name: string;
   private status: 'DONE' | 'UNDONE';
   private dueDate: Date;
@@ -33,5 +34,22 @@ export class Task {
   // タスクは未完了状態で作成し、完了したら戻すことはできない
   done = (): void => {
     this.status = 'DONE';
+  };
+
+  //getter
+  getId = () => {
+    return this.id;
+  };
+  getName = () => {
+    return this.name;
+  };
+  getStatus = () => {
+    return this.status;
+  };
+  getDueDate = () => {
+    return this.dueDate;
+  };
+  getPostPoneCount = () => {
+    return this.postponeCount;
   };
 }

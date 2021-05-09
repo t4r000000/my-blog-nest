@@ -3,7 +3,6 @@ import { PrismaService } from '../../utils/prisma/prisma.service';
 import { TaskRepositry } from '../core/domain-services/task.repositry';
 import { Task } from '../core/domain/task';
 
-//fix: Injectableなしで実装してみたいな後で
 @Injectable()
 export class TaskImplementsAsPrisma implements TaskRepositry {
   constructor(private prisma: PrismaService) {}

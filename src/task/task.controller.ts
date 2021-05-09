@@ -1,23 +1,18 @@
 import { Body, Controller, Param, Post, Get } from '@nestjs/common';
-import TaskApplication from './core/application-services/task.application';
 import { Task } from './core/domain/task';
-import { TaskImplementsAsPrisma } from './infrastorucuture/task.prisma';
+import { TaskService } from './task.service';
 
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskImplementAsPrisma: TaskImplementsAsPrisma) {}
+  constructor(private readonly taskService: TaskService) {}
 
   @Get(':id')
   async findById(@Param() params: { id: number }): Promise<Task> {
-    const taskApplication = new TaskApplication(this.taskImplementAsPrisma);
-    return taskApplication.findTask(Number(params.id));
+    return await this.taskService.findTask(Number(params.id));
   }
 
   @Post()
   async saveTask(@Body() taskPost: { name: string; dueDate: Date }) {
-    const taskApplication = new TaskApplication(this.taskImplementAsPrisma);
-    return taskApplication.createTask(
-      new Task(taskPost.name, taskPost.dueDate),
-    );
+    return await this.taskService.createTask(taskPost.name, taskPost.dueDate);
   }
 }

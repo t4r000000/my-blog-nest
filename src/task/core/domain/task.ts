@@ -24,7 +24,7 @@ export class Task {
     if (this.postponeCount >= Task.POSTPONE_MAX_COUNT) {
       throw new Error('最大延期回数を超過しています');
     }
-    if (postPoneDate > 0) {
+    if (0 > postPoneDate) {
       throw new Error('1以下の値が入力されています');
     }
     this.dueDate.setDate(this.dueDate.getDate() + postPoneDate);

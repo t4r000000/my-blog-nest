@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import TaskApplication from './core/application-services/task.application';
 import { Task } from './core/domain/task';
-import { TaskImplementsAsPrisma } from './infrastorucuture/task.prisma';
+import { TaskImplementsAsPrisma } from './infrastructure/task.prisma';
 
 @Injectable()
 export class TaskService {

@@ -29,7 +29,7 @@ export class TaskImplementsAsPrisma implements TaskRepositry {
             postponeCount: task.getPostPoneCount(),
           },
         })
-        .then((tasks) => resolve(new Task(tasks.name, tasks.dueDate)))
+        .then((tasks) => resolve(new Task(tasks.name, tasks.dueDate, tasks.id)))
         .catch((err) => reject(new Error(err)));
     });
   };

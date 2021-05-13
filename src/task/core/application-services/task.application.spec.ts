@@ -1,6 +1,7 @@
 import TaskApplication from './task.application';
 import { TaskImplementsAsPrisma } from '../../infrastructure/task.prisma';
 import { PrismaService } from '../../../utils/prisma/prisma.service';
+import { Task } from '../domain/task';
 
 // タスクは必ずタスク名、期日を持つ
 // タスクは未完了状態で作成し、完了したら戻すことはできない
@@ -11,11 +12,21 @@ describe('Task Application', () => {
   const repositry = new TaskImplementsAsPrisma(new PrismaService());
   const taskApplication = new TaskApplication(repositry);
 
-  it('抽象化されたTaskRepositryにPrismaで具象下したインスタンスを注入可能かテスト', () => {
+  it('should be defined', () => {
+    expect(taskApplication).toBeDefined();
+  });
+
+  it('taskApplication should have taskrepositry instance', () => {
     expect(taskApplication.taskRepositry).toBe(repositry);
   });
 
-  it('should be defined', () => {
-    expect(taskApplication).toBeDefined();
+  it('task application can create task', async () => {
+    const createdTask = await taskApplication.createTask(
+      new Task('doSomething', new Date()),
+    );
+    const createdTaskFromDB = await taskApplication.findTask(
+      createdTask.getId(),
+    );
+    expect(createdTaskFromDB.getName()).toBe(createdTask.getName());
   });
 });

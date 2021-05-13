@@ -5,18 +5,21 @@
 // タスク名は変更することができない
 
 export class Task {
-  private id: number;
+  private id?: number;
   private name: string;
   private status: 'DONE' | 'UNDONE';
   private dueDate: Date;
   private postponeCount: number;
   private static POSTPONE_MAX_COUNT: 3 = 3;
 
-  constructor(name: string, dueDate: Date) {
+  constructor(name: string, dueDate: Date, id?: number) {
     this.name = name;
     this.status = 'UNDONE';
     this.dueDate = dueDate;
     this.postponeCount = 0;
+    if (id) {
+      this.id = id;
+    }
   }
 
   // タスクは3回だけ、1日ずつ延期することができる。

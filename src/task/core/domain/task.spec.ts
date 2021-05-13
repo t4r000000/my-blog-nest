@@ -29,7 +29,12 @@ describe('Task Domain', () => {
     }
   });
 
-  it('task status should be created as "UNDONE"', () => {
+  it('task status should be "UNDONE" in default', () => {
     expect(task.getStatus()).toBe('UNDONE');
+  });
+
+  it('task status should be "DONE" after done()', () => {
+    task.done();
+    expect(task.getStatus()).toBe('DONE');
   });
 });

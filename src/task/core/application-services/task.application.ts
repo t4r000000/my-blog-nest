@@ -25,12 +25,19 @@ class TaskApplication {
     });
   };
 
-  postPone(taskId: number, date: number): void {
-    this.taskRepositry.findById(taskId).then((task) => {
-      task.postpone(date);
-      this.taskRepositry.save(task);
+  postPone = async (taskId: number, date: number): Promise<Task> => {
+    return new Promise((resolve, reject) => {
+      this.taskRepositry
+        .findById(taskId)
+        .then((task) => {
+          return task.postpone(date);
+        })
+        .then((task) => {
+          resolve(this.taskRepositry.save(task));
+        })
+        .catch((error) => reject(new Error(error)));
     });
-  }
+  };
 }
 
 export default TaskApplication;

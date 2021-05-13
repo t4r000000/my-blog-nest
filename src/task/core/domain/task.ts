@@ -23,7 +23,7 @@ export class Task {
   }
 
   // タスクは3回だけ、1日ずつ延期することができる。
-  postpone = (postPoneDate: number): void => {
+  postpone = (postPoneDate: number): Task => {
     if (this.postponeCount >= Task.POSTPONE_MAX_COUNT) {
       throw new Error('最大延期回数を超過しています');
     }
@@ -32,6 +32,7 @@ export class Task {
     }
     this.dueDate.setDate(this.dueDate.getDate() + postPoneDate);
     this.postponeCount++;
+    return this;
   };
 
   // タスクは未完了状態で作成し、完了したら戻すことはできない

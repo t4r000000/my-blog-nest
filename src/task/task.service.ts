@@ -5,17 +5,16 @@ import { TaskImplementsAsPrisma } from './infrastructure/task.prisma';
 
 @Injectable()
 export class TaskService {
-  constructor(
-    private readonly taskImplementsAsPrisma: TaskImplementsAsPrisma,
-  ) {}
+  private readonly taskApplication: TaskApplication;
+  constructor(private readonly taskImplementsAsPrisma: TaskImplementsAsPrisma) {
+    this.taskApplication = new TaskApplication(this.taskImplementsAsPrisma);
+  }
 
   findTask = async (id: number): Promise<Task> => {
-    const taskApplication = new TaskApplication(this.taskImplementsAsPrisma);
-    return await taskApplication.findTask(Number(id));
+    return await this.taskApplication.findTask(Number(id));
   };
 
   createTask = async (taskName: string, dueDate: Date): Promise<Task> => {
-    const taskApplication = new TaskApplication(this.taskImplementsAsPrisma);
-    return await taskApplication.createTask(new Task(taskName, dueDate));
+    return await this.taskApplication.createTask(new Task(taskName, dueDate));
   };
 }

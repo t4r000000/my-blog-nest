@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -11,9 +11,9 @@ generator client {
 }
 
 model Task {
-  id Int @default(autoincrement()) @id
-  name String
-  status String
-  dueDate DateTime
+  id            String   @id
+  name          String
+  status        String
+  dueDate       DateTime
   postponeCount Int
 }

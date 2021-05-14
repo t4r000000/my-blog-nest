@@ -16,7 +16,7 @@ class TaskApplication {
     });
   };
 
-  findTask = (id: number): Promise<Task> => {
+  findTask = (id: string): Promise<Task> => {
     return new Promise((resolve, reject) => {
       this.taskRepositry
         .findById(id)
@@ -25,7 +25,7 @@ class TaskApplication {
     });
   };
 
-  postPone = async (taskId: number, date: number): Promise<Task> => {
+  postPone = async (taskId: string, date: number): Promise<Task> => {
     return new Promise((resolve, reject) => {
       this.taskRepositry
         .findById(taskId)

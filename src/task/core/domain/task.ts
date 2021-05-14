@@ -3,22 +3,25 @@
 // タスクは未完了状態で作成し、完了したら戻すことはできない
 // タスクは3回だけ、1日ずつ延期することができる。
 // タスク名は変更することができない
+import { v4 } from 'uuid';
 
 export class Task {
-  private id?: number;
+  private id?: string;
   private name: string;
   private status: 'DONE' | 'UNDONE';
   private dueDate: Date;
   private postponeCount: number;
   private static POSTPONE_MAX_COUNT: 3 = 3;
 
-  constructor(name: string, dueDate: Date, id?: number) {
+  constructor(name: string, dueDate: Date, id?: string) {
     this.name = name;
     this.status = 'UNDONE';
     this.dueDate = dueDate;
     this.postponeCount = 0;
     if (id) {
       this.id = id;
+    } else {
+      this.id = v4();
     }
   }
 

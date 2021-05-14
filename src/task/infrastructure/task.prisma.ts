@@ -7,7 +7,7 @@ import { Task } from '../core/domain/task';
 export class TaskImplementsAsPrisma implements TaskRepositry {
   constructor(private prisma: PrismaService) {}
 
-  findById = (id: number): Promise<Task> | null => {
+  findById = (id: string): Promise<Task> | null => {
     return new Promise((resolve, reject) => {
       this.prisma.task
         .findUnique({
@@ -23,6 +23,7 @@ export class TaskImplementsAsPrisma implements TaskRepositry {
       this.prisma.task
         .create({
           data: {
+            id: task.getId(),
             name: task.getName(),
             status: task.getStatus(),
             dueDate: task.getDueDate(),

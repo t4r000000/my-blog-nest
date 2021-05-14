@@ -10,6 +10,18 @@ services:
       - node_modules_volume:/app/node_modules
     ports: 
       - '3000:3000'
-
+    links:
+      - "postgres"
+  postgres:
+    image: postgres:12
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: 'sample'
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'password'
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+    volumes:
+      - ./pgsql/data:/var/lib/postgresql/data
 volumes: 
   node_modules_volume:

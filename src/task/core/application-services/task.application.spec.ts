@@ -12,6 +12,10 @@ describe('Task Application', () => {
   const repositry = new TaskImplementsAsPrisma(prismaService);
   const taskApplication = new TaskApplication(repositry);
 
+  afterAll(async () => {
+    await prismaService.onModuleDestroy();
+  });
+
   it('should be defined', () => {
     expect(taskApplication).toBeDefined();
   });
@@ -30,6 +34,7 @@ describe('Task Application', () => {
     expect(createdTaskFromDB.getName()).toBe(createdTask.getName());
   });
 
+  //エラーどうやって投げるん...?
   it('task application can throw error', async () => {
     taskApplication
       .createTask(new Task('doSomething', new Date()))

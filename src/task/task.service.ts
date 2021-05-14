@@ -10,11 +10,29 @@ export class TaskService {
     this.taskApplication = new TaskApplication(this.taskImplementsAsPrisma);
   }
 
-  findTask = async (id: number): Promise<Task> => {
-    return await this.taskApplication.findTask(Number(id));
+  findTask = async (id: string): Promise<Task> => {
+    return new Promise((resolve, reject) => {
+      this.taskApplication
+        .findTask(id)
+        .then((task) => {
+          resolve(task);
+        })
+        .catch((error) => {
+          reject(new Error(error));
+        });
+    });
   };
 
-  createTask = async (taskName: string, dueDate: Date): Promise<Task> => {
-    return await this.taskApplication.createTask(new Task(taskName, dueDate));
+  createTask = (taskName: string, dueDate: Date): Promise<Task> => {
+    return new Promise((resolve, reject) => {
+      this.taskApplication
+        .createTask(new Task(taskName, dueDate))
+        .then((task) => {
+          resolve(task);
+        })
+        .catch((error) => {
+          reject(new Error(error));
+        });
+    });
   };
 }

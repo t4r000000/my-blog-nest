@@ -7,8 +7,8 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Get(':id')
-  async findById(@Param() params: { id: number }): Promise<Task> {
-    return await this.taskService.findTask(Number(params.id));
+  async findById(@Param() params: { id: string }): Promise<Task> {
+    return await this.taskService.findTask(params.id);
   }
 
   @Post()

@@ -18,11 +18,7 @@ export class Task {
     this.status = 'UNDONE';
     this.dueDate = dueDate;
     this.postponeCount = 0;
-    if (id) {
-      this.id = id;
-    } else {
-      this.id = v4();
-    }
+    id ? (this.id = id) : (this.id = v4());
   }
 
   // タスクは3回だけ、1日ずつ延期することができる。

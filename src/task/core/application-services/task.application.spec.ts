@@ -2,6 +2,7 @@ import TaskApplication from './task.application';
 import { TaskImplementsAsPrisma } from '../../infrastructure/task.prisma';
 import { PrismaService } from '../../../utils/prisma/prisma.service';
 import { Task } from '../domain/task';
+
 // タスクは必ずタスク名、期日を持つ
 // タスクは未完了状態で作成し、完了したら戻すことはできない
 // タスクは3回だけ、1日ずつ延期することができる。

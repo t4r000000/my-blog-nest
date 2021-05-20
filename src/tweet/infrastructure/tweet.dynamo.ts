@@ -1,4 +1,7 @@
 //Fix it: read capacity制限にかかったら、時間を置いて再度実行する処理
+//Consider it: Dynamoのテーブル月単位に作成するくらいでもいいかも。最低年。
+//Check it: then,catch内でネストされてる場所で投げた例外処理が適切にキャッチされてるか確認
+//Fix it: ScanCommandの組み立ては関数として分離してもいいかも
 
 import { Tweet } from '../core/domain/tweet';
 import { TweetRepositry } from '../core/domain-repositry/tweet.repositry';
@@ -43,7 +46,8 @@ export class TweetImplementAsDynamo implements TweetRepositry {
             resolve(null);
             return;
           }
-          if (!this.argIsTweetArray(Tweets.Items)) {
+          if (!argIsTweetArray(Tweets.Items)) {
+            //例外を投げる原因になったデータもトレースできると嬉しい。基本発生しないはずだが
             reject(new Error('DynamoDBから取得したデータ型が不正です'));
             return;
           }
@@ -57,7 +61,7 @@ export class TweetImplementAsDynamo implements TweetRepositry {
               },
             };
             return new Tweet(
-              Number(tweet.id.S),
+              tweet.id.S,
               tweet.created_at.S,
               publicMetrics,
               tweet.text.S,
@@ -76,40 +80,32 @@ export class TweetImplementAsDynamo implements TweetRepositry {
               );
               return;
             })
-            .catch((error) => {
-              reject(new Error(error));
+            .catch((error: Error) => {
+              reject(error);
             });
         })
-        .catch((error) => reject(new Error(error)));
+        //The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.
+        .catch((error) => reject(error));
     });
-  };
-
-  argIsTweetArray = (arg: any[]): arg is dynamoTweet[] => {
-    if (typeof arg.length !== 'number') return false;
-    arg.forEach((tweet) => {
-      if (!this.argIsTweet(tweet)) {
-        return false;
-      }
-    });
-    return true;
-  };
-
-  argIsTweet = (arg: any): arg is dynamoTweet => {
-    return (
-      typeof arg.text.s === 'string' &&
-      typeof arg.id.s === 'string' &&
-      typeof arg.author_id.s === 'string' &&
-      typeof arg.author_id.s === 'string' &&
-      typeof arg.public_metrics.M.like_count.N === 'string' &&
-      typeof arg.public_metrics.M.retweet_count.N === 'string'
-    );
   };
 }
+
+const argIsTweetArray = (arg: any[]): arg is dynamoTweet[] => {
+  return arg.every(argIsTweet);
+};
+
+const argIsTweet = (arg: any): arg is dynamoTweet => {
+  return (
+    typeof arg.text.S === 'string' &&
+    typeof arg.id.S === 'string' &&
+    typeof arg.public_metrics.M.like_count.N === 'string' &&
+    typeof arg.public_metrics.M.retweet_count.N === 'string'
+  );
+};
 
 type dynamoTweet = {
   text: { S: string };
   id: { S: string };
-  author_id: { S: string };
   created_at: { S: string };
   public_metrics: {
     M: {

@@ -80,12 +80,12 @@ export class TweetImplementAsDynamo implements TweetRepositry {
               );
               return;
             })
-            .catch((error) => {
-              //reject(new Error(error));
-              reject(new Error(error));
+            .catch((error: Error) => {
+              reject(error);
             });
         })
-        .catch((error) => reject(new Error(error)));
+        //The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.
+        .catch((error) => reject(error));
     });
   };
 }

@@ -81,6 +81,7 @@ export class TweetImplementAsDynamo implements TweetRepositry {
               return;
             })
             .catch((error) => {
+              //reject(new Error(error));
               reject(new Error(error));
             });
         })
@@ -90,16 +91,13 @@ export class TweetImplementAsDynamo implements TweetRepositry {
 }
 
 const argIsTweetArray = (arg: any[]): arg is dynamoTweet[] => {
-  if (typeof arg.length !== 'number') return false;
   return arg.every(argIsTweet);
 };
 
 const argIsTweet = (arg: any): arg is dynamoTweet => {
   return (
-    typeof arg.text.s === 'string' &&
-    typeof arg.id.s === 'string' &&
-    typeof arg.author_id.s === 'string' &&
-    typeof arg.author_id.s === 'string' &&
+    typeof arg.text.S === 'string' &&
+    typeof arg.id.S === 'string' &&
     typeof arg.public_metrics.M.like_count.N === 'string' &&
     typeof arg.public_metrics.M.retweet_count.N === 'string'
   );
@@ -108,7 +106,6 @@ const argIsTweet = (arg: any): arg is dynamoTweet => {
 type dynamoTweet = {
   text: { S: string };
   id: { S: string };
-  author_id: { S: string };
   created_at: { S: string };
   public_metrics: {
     M: {

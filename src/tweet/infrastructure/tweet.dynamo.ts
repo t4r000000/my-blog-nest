@@ -1,3 +1,5 @@
+//Fix it: read capacity制限にかかったら、時間を置いて再度実行する処理
+
 import { Tweet } from '../core/domain/tweet';
 import { TweetRepositry } from '../core/domain-repositry/tweet.repositry';
 
@@ -37,43 +39,48 @@ export class TweetImplementAsDynamo implements TweetRepositry {
       this.dynamoDBClient
         .send(new ScanCommand(scanParam))
         .then(async (Tweets) => {
-          if (Tweets.LastEvaluatedKey) {
-            try {
-              const tweets = await this.findFromCreatedAt(
-                createdAt,
-                Tweets.LastEvaluatedKey,
-              );
-            } catch (error) {}
-
-            //resolve('to fix Write Somethin')
-          }
           if (typeof Tweets.Items === 'undefined') {
             resolve(null);
             return;
           }
-
-          if (this.argIsTweetArray(Tweets.Items)) {
-            resolve(
-              Tweets.Items.map((tweet) => {
-                const publicMetrics = {
-                  retweet_count: {
-                    N: Number(tweet.public_metrics.M.retweet_count.N),
-                  },
-                  like_count: {
-                    N: Number(tweet.public_metrics.M.like_count.N),
-                  },
-                };
-                return new Tweet(
-                  Number(tweet.id.S),
-                  tweet.created_at.S,
-                  publicMetrics,
-                  tweet.text.S,
-                );
-              }),
-            );
+          if (!this.argIsTweetArray(Tweets.Items)) {
+            reject(new Error('DynamoDBから取得したデータ型が不正です'));
+            return;
           }
+          const tweetArray = Tweets.Items.map((tweet) => {
+            const publicMetrics = {
+              retweet_count: {
+                N: Number(tweet.public_metrics.M.retweet_count.N),
+              },
+              like_count: {
+                N: Number(tweet.public_metrics.M.like_count.N),
+              },
+            };
+            return new Tweet(
+              Number(tweet.id.S),
+              tweet.created_at.S,
+              publicMetrics,
+              tweet.text.S,
+            );
+          });
+          if (!Tweets.LastEvaluatedKey) {
+            resolve(tweetArray);
+            return;
+          }
+          this.findFromCreatedAt(createdAt, Tweets.LastEvaluatedKey)
+            .then((nextTweetArray) => {
+              resolve(
+                nextTweetArray === null
+                  ? tweetArray
+                  : tweetArray.concat(nextTweetArray),
+              );
+              return;
+            })
+            .catch((error) => {
+              reject(new Error(error));
+            });
         })
-        .catch((err) => reject(new Error(err)));
+        .catch((error) => reject(new Error(error)));
     });
   };
 

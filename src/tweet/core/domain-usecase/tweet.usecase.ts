@@ -1,31 +1,54 @@
-import { Tweet, TweetSummary } from '../domain/tweet';
-import {
-  TweetRepositry,
-  TweetSummaryRepositry,
-} from '../domain-repositry/tweet.repositry';
+import { TweetSummary } from '../domain/tweet';
+import { TweetRepositry } from '../domain-repositry/tweet.repositry';
 import dayjs from 'dayjs';
 
 class TweetUseCase {
   private readonly tweetRepositry: TweetRepositry;
-  private readonly tweetSummaryRepositry: TweetSummaryRepositry;
-  constructor(
-    tweetRepositry: TweetRepositry,
-    tweetSummaryRepositry: TweetSummaryRepositry,
-  ) {
+  constructor(tweetRepositry: TweetRepositry) {
     this.tweetRepositry = tweetRepositry;
-    this.tweetSummaryRepositry = tweetSummaryRepositry;
   }
 
-  summarizeTweets = (): Promise<Tweet[]> => {
+  //get this month tweets & save summary
+  summarizeLastMonthTweets = (): Promise<void> => {
     return new Promise((resolve, reject) => {
+      const startOfThisMonth = dayjs().startOf('month');
       this.tweetRepositry
-        .findByCreatedAt(dayjs().startOf('month'))
+        .findFromCreatedAt(startOfThisMonth)
         .then((tweets) => {
-          const tweetSummary = new TweetSummary(dayjs().startOf('month'));
-          tweets.forEach((tweet) => {});
+          if (tweets == null) {
+            reject(
+              new Error(
+                `No Tweets between ${startOfThisMonth.toISOString()} & ${dayjs().toISOString()}`,
+              ),
+            );
+            return;
+          }
+          const tweetSummary = new TweetSummary(
+            startOfThisMonth.toISOString(),
+            0,
+            dayjs().toISOString(),
+          );
+          tweets.forEach((tweet) => {
+            tweetSummary.inclement();
+            if (
+              tweet.getPublicMetrics().like_count.N >
+              tweetSummary.getMostFavoredTweet().foveredCount
+            ) {
+              tweetSummary.setMostFavoredTweet(
+                Number(tweet.getId()),
+                tweet.getPublicMetrics().like_count.N,
+              );
+            }
+          });
+          this.tweetRepositry
+            .saveSummary(tweetSummary)
+            .catch((error: Error) => {
+              reject(error);
+              return;
+            });
         })
-        .catch((err) => {
-          reject(new Error(err));
+        .catch((err: Error) => {
+          reject(err);
         });
     });
   };

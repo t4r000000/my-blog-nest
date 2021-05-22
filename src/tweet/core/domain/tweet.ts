@@ -16,12 +16,17 @@ type publicMetrics = {
 };
 
 export class Tweet {
-  private id: number;
+  private id: string;
   private created_at: dayjs.Dayjs;
   private publicMetrics: publicMetrics;
   private text: string;
 
-  constructor(id: number, created_at: string, publicMetrics, text: string) {
+  constructor(
+    id: string,
+    created_at: string,
+    publicMetrics: publicMetrics,
+    text: string,
+  ) {
     this.id = id;
     this.created_at = dayjs(created_at);
     this.publicMetrics = publicMetrics;
@@ -50,19 +55,19 @@ type mostFavoredTweet = {
 export class TweetSummary {
   private yyyyMM: string;
   private counts: number;
-  private mostFavoredTweet: mostFavoredTweet;
   private lasterUpdated: dayjs.Dayjs;
+  private mostFavoredTweet?: mostFavoredTweet;
 
   constructor(
     yyyyMM: string,
     counts: number,
-    mostFavoredTweet: mostFavoredTweet,
-    lasterUpdated: dayjs.Dayjs,
+    lasterUpdated: string,
+    mostFavoredTweet?: mostFavoredTweet,
   ) {
     this.yyyyMM = yyyyMM;
     this.counts = counts;
+    this.lasterUpdated = dayjs(lasterUpdated);
     this.mostFavoredTweet = mostFavoredTweet;
-    this.lasterUpdated = lasterUpdated;
   }
 
   inclement = () => {
@@ -70,8 +75,10 @@ export class TweetSummary {
   };
 
   setMostFavoredTweet = (id: number, foveredCount: number) => {
-    this.mostFavoredTweet.id = id;
-    this.mostFavoredTweet.foveredCount = foveredCount;
+    this.mostFavoredTweet = {
+      id: id,
+      foveredCount: foveredCount,
+    };
   };
 
   getYYYYMM = () => {
@@ -79,6 +86,18 @@ export class TweetSummary {
   };
 
   getMostFavoredTweet = () => {
+    //Fix it: mostFavoredTweetない時に適当なあたい返してるけどこれいいのか？例外投げるべきか？
+    if (typeof this.mostFavoredTweet === 'undefined') {
+      return { id: 0, foveredCount: 0 };
+    }
     return this.mostFavoredTweet;
+  };
+
+  getLastUpdated = () => {
+    return this.lasterUpdated;
+  };
+
+  getCounts = () => {
+    return this.counts;
   };
 }

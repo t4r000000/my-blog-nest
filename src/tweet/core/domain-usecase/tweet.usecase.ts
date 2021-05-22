@@ -2,7 +2,7 @@ import { TweetSummary } from '../domain/tweet';
 import { TweetRepositry } from '../domain-repositry/tweet.repositry';
 import dayjs from 'dayjs';
 
-class TweetUseCase {
+export class TweetUseCase {
   private readonly tweetRepositry: TweetRepositry;
   constructor(tweetRepositry: TweetRepositry) {
     this.tweetRepositry = tweetRepositry;
@@ -28,6 +28,7 @@ class TweetUseCase {
             0,
             dayjs().toISOString(),
           );
+          // 集計
           tweets.forEach((tweet) => {
             tweetSummary.inclement();
             if (
@@ -42,6 +43,10 @@ class TweetUseCase {
           });
           this.tweetRepositry
             .saveSummary(tweetSummary)
+            .then(() => {
+              resolve();
+              return;
+            })
             .catch((error: Error) => {
               reject(error);
               return;

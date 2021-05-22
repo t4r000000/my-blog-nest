@@ -94,7 +94,7 @@ export class TweetImplementAsDynamo implements TweetRepositry {
     const putParam: PutItemCommandInput = {
       TableName: 'TweetSummary',
       Item: {
-        yyyyMM: {
+        dayISOS: {
           S: tweetSummary.getYYYYMM(),
         },
         counts: {
@@ -109,6 +109,9 @@ export class TweetImplementAsDynamo implements TweetRepositry {
               N: tweetSummary.getMostFavoredTweet().foveredCount.toString(),
             },
           },
+        },
+        lastUpdated: {
+          S: tweetSummary.getLastUpdated().toISOString(),
         },
       },
     };

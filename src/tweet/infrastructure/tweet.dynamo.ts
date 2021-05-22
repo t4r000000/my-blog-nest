@@ -3,13 +3,15 @@
 //Check it: then,catch内でネストされてる場所で投げた例外処理が適切にキャッチされてるか確認
 //Fix it: ScanCommandの組み立ては関数として分離してもいいかも
 
-import { Tweet } from '../core/domain/tweet';
+import { Tweet, TweetSummary } from '../core/domain/tweet';
 import { TweetRepositry } from '../core/domain-repositry/tweet.repositry';
 
 import dayjs from 'dayjs';
 import {
   AttributeValue,
   DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
   ScanCommand,
   ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
@@ -88,6 +90,39 @@ export class TweetImplementAsDynamo implements TweetRepositry {
         .catch((error) => reject(error));
     });
   };
+  saveSummary(tweetSummary: TweetSummary): Promise<void> {
+    const putParam: PutItemCommandInput = {
+      TableName: 'TweetSummary',
+      Item: {
+        yyyyMM: {
+          S: tweetSummary.getYYYYMM(),
+        },
+        counts: {
+          N: tweetSummary.getCounts().toString(),
+        },
+        mostFavoredTweet: {
+          M: {
+            id: {
+              N: tweetSummary.getMostFavoredTweet().id.toString(),
+            },
+            foveredCount: {
+              N: tweetSummary.getMostFavoredTweet().foveredCount.toString(),
+            },
+          },
+        },
+      },
+    };
+    return new Promise((resolve, reject) => {
+      this.dynamoDBClient
+        .send(new PutItemCommand(putParam))
+        .then(() => {
+          resolve();
+        })
+        .catch((error: Error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 const argIsTweetArray = (arg: any[]): arg is dynamoTweet[] => {

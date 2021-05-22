@@ -2,9 +2,6 @@ import { Tweet, TweetSummary } from '../domain/tweet';
 import dayjs from 'dayjs';
 
 export interface TweetRepositry {
-  findByCreatedAt(dayjs: dayjs.Dayjs): Promise<Tweet[] | null>;
-}
-
-export interface TweetSummaryRepositry {
+  findFromCreatedAt(dayjs: dayjs.Dayjs): Promise<Tweet[] | null>;
   saveSummary(tweetSummary: TweetSummary): Promise<void>;
 }

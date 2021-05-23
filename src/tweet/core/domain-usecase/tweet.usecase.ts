@@ -24,7 +24,7 @@ export class TweetUseCase {
             return;
           }
           const tweetSummary = new TweetSummary(
-            startOfThisMonth.toISOString(),
+            dayjs().startOf('date').toISOString(),
             0,
             dayjs().toISOString(),
           );

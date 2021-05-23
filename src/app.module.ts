@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TaskImplementsAsPrisma } from './task/infrastructure/task.prisma';
-import { TaskController } from './task/task.controller';
-import { TaskService } from './task/task.service';
-import { PrismaService } from './utils/prisma/prisma.service';
+import { TweetImplementAsDynamo } from './tweet/infrastructure/tweet.dynamo';
+import { TweetController } from './tweet/tweet.controller';
+import { TweetService } from './tweet/tweet.service';
 
 @Module({
-  imports: [],
-  controllers: [AppController, TaskController],
-  providers: [AppService, TaskService, PrismaService, TaskImplementsAsPrisma],
+  imports: [ScheduleModule.forRoot()],
+  controllers: [AppController, TweetController],
+  providers: [AppService, TweetService, TweetImplementAsDynamo],
 })
 export class AppModule {}

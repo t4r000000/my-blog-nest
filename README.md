@@ -26,6 +26,16 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Setup environment
+
+
+## Initialize
+
+```bash
+$ terraform init
+$ terraform apply
+```
+
 ## Installation
 
 ```bash

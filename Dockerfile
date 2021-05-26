@@ -2,7 +2,7 @@ FROM node:16-buster-slim AS build-stage
 
 WORKDIR /app
 COPY . ./
-RUN npm install
+RUN npm install && npm build
 
 FROM node:16-buster-slim as production-stage
 WORKDIR /app

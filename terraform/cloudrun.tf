@@ -31,6 +31,12 @@ resource "google_cloud_run_service" "default" {
       }
     }
   }
+  metadata {
+  annotations = {
+      "autoscaling.knative.dev/maxScale"      = "10"
+    }
+  }
+  autogenerate_revision_name = true
 }
 
 resource "google_cloud_run_service_iam_member" "member" {

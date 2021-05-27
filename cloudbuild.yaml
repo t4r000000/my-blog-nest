@@ -24,7 +24,7 @@ steps:
   '--platform',
   'managed',
   '--max-instances',
-  '2',
+  '10',
   ]
 images:
 - gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA

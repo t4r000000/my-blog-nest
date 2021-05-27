@@ -2,6 +2,7 @@ variable "project" {}
 variable "region" {}
 variable "zone" {}
 
+
 provider "google" {
   project = var.project
   region  = var.region

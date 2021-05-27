@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { TweetService } from './tweet.service';
 
@@ -11,6 +11,19 @@ export class TweetController {
     timeZone: 'Asia/Tokyo',
   })
   async saveMonthlySummary(): Promise<string> {
+    return new Promise(() => {
+      this.tweetService
+        .saveMonthlySummary()
+        .then(() => {
+          console.log('implemented');
+        })
+        //Fix: Slack 通知飛ばすべべ？
+        .catch((error) => console.error(error));
+    });
+  }
+
+  @Get()
+  async saveSummaryByRequest(): Promise<string> {
     return new Promise(() => {
       this.tweetService
         .saveMonthlySummary()

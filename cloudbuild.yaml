@@ -18,8 +18,6 @@ steps:
   '--max-instances',
   '10',
   ]
-  env:
-  - ''
 images:
 - gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA
 

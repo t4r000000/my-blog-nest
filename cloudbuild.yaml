@@ -4,16 +4,8 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
+  entrypoint: 'gcloud'
   args: [
-  '-c',
-  'export',
-  'AWS_ACCESS_KEY_ID=$(gcloud beta secrets versions access latest --secret="aws-access")',
-  '&&',
-  'export',
-  'AWS_SECRET_ACCESS_KEY=$(gcloud beta secrets versions access latest --secret="aws-secret")',
-  '&&',
-  'gcloud',
   'run',
   'deploy',
   'cloudrun-backend',
@@ -26,6 +18,8 @@ steps:
   '--max-instances',
   '10',
   ]
+  env:
+  - ''
 images:
 - gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA
 

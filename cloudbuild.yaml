@@ -8,8 +8,8 @@ steps:
   '-f',
   'Dockerfile',
   '--build-arg',
-  'AWS_ACCESS_KEY_ID=$(gcloud beta secrets versions access latest --secret="aws-access")',
-  'AWS_SECRET_ACCESS_KEY=$(gcloud beta secrets versions access latest --secret="aws-secret")',
+  'AWS_ACCESS_KEY_ID="$(gcloud beta secrets versions access latest --secret="aws-access")"',
+  'AWS_SECRET_ACCESS_KEY="$(gcloud beta secrets versions access latest --secret="aws-secret")"',
   ]
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA']

@@ -1,10 +1,22 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
-  args: [ '-c', "echo AWS_SECRET_ACCESS=$(gcloud secrets versions access latest --secret=aws-secret) >> secrets.txt" ]
+  args: [
+  '-c',
+  "echo Environment Value Setiing &&
+  sed -i 's|REP_ORIGIN|$_REP_ORIGIN .env.example' &&
+  sed -i 's|REP_OIDC_CLIENT_ID|$_REP_OIDC_CLIENT_ID .env.example' 
+  "
+  ]
 - name: gcr.io/cloud-builders/gcloud
   entrypoint: 'bash'
-  args: [ '-c', "echo AWS_ACCESS_KEY=$(gcloud secrets versions access latest --secret=aws-access) >> secrets.txt" ]
+  args: [
+  '-c',
+  "echo Secret Inoformation Setiing &&
+  echo AWS_SECRET_ACCESS=$(gcloud secrets versions access latest --secret=aws-secret) >> secrets.txt &&
+  echo AWS_ACCESS_KEY=$(gcloud secrets versions access latest --secret=aws-access) >> secrets.txt &&
+  echo AWS_ACCESS_KEY=$(gcloud secrets versions access latest --secret=aws-access)" 
+  ]
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args: ['-c', "docker build -t gcr.io/$PROJECT_ID/cloudrun-backend:$COMMIT_SHA . -f ./Dockerfile $(cat secrets.txt | sed 's/^/--build-arg /')"]

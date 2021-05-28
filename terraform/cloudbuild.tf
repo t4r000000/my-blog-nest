@@ -1,3 +1,6 @@
+variable "origin" {}
+variable "oidc_client_id" {}
+
 data "google_project" "project" {}
 
 resource "google_cloudbuild_trigger" "cloudrun-trigger" {
@@ -10,10 +13,10 @@ resource "google_cloudbuild_trigger" "cloudrun-trigger" {
     }
   }
 
-  # substitutions = {
-  #   _FOO = "bar"
-  #   _BAZ = "qux"
-  # }
+  substitutions = {
+    _REP_ORIGIN = var.origin
+    _REP_OIDC_CLIENT_ID = var.oidc_client_id
+  }
 
   filename = "cloudbuild.yaml"
 }

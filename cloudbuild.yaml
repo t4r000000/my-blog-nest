@@ -14,7 +14,7 @@ steps:
   "echo Secret Inoformation Setiing &&
   echo AWS_SECRET_ACCESS=$(gcloud secrets versions access latest --secret=aws-secret) >> secrets.txt &&
   echo AWS_ACCESS_KEY=$(gcloud secrets versions access latest --secret=aws-access) >> secrets.txt &&
-  echo AWS_ACCESS_KEY=$(gcloud secrets versions access latest --secret=aws-access)" 
+  echo OIDC_CLIENT_SECRET=$(gcloud secrets versions access latest --secret=oidc-client-secret) >> secrets.txt " 
   ]
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'

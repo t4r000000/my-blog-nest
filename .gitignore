@@ -39,3 +39,5 @@ lerna-debug.log*
 terraform/terraform.tfvars
 .terraform/
 *.tfstate*
+
+.env

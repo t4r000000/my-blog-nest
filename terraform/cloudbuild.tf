@@ -1,5 +1,6 @@
 variable "origin" {}
 variable "oidc_client_id" {}
+variable "token_endpoint" {}
 
 data "google_project" "project" {}
 
@@ -16,6 +17,7 @@ resource "google_cloudbuild_trigger" "cloudrun-trigger" {
   substitutions = {
     _REP_ORIGIN = var.origin
     _REP_OIDC_CLIENT_ID = var.oidc_client_id
+    _REP_TOKEN_ENDPOINT=var.token_endpoint
   }
 
   filename = "cloudbuild.yaml"

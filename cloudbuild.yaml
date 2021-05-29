@@ -5,6 +5,7 @@ steps:
   '-c',
   "echo Environment Value Setiing &&
   sed -i 's|REP_ORIGIN|$_REP_ORIGIN|' .env.example &&
+  sed -i 's|REP_TOKEN_ENDPOINT|$_REP_TOKEN_ENDPOINT|' .env.example &&
   sed -i 's|REP_OIDC_CLIENT_ID|$_REP_OIDC_CLIENT_ID|' .env.example"
   ]
 - name: gcr.io/cloud-builders/gcloud

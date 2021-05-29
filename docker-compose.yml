@@ -9,7 +9,7 @@ services:
       - ./:/app
       - node_modules_volume:/app/node_modules
     ports: 
-      - '80:80'
+      - '8080:8080'
     links:
       - "postgres"
   postgres:

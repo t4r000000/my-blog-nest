@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,7 +8,7 @@ import { TweetController } from './tweet/tweet.controller';
 import { TweetService } from './tweet/tweet.service';
 
 @Module({
-  imports: [ScheduleModule.forRoot()],
+  imports: [ConfigModule.forRoot(), ScheduleModule.forRoot()],
   controllers: [AppController, TweetController],
   providers: [AppService, TweetService, TweetImplementAsDynamo],
 })
